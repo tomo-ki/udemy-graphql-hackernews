@@ -6,34 +6,25 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-// HackerNewsの1つ1つの投稿
-let links = [
-  {
-    id: "link-0",
-    description: "GraphQLチュートリアルをUdemyで学ぶ",
-    url: "www.udemy-graphql-tutorial.com",
-  },
-];
-
 // resolver関数：typeDefsで定義した型に何か値を代入する関数
 // https://www.apollographql.com/docs/apollo-server/getting-started#step-5-define-a-resolver
 const resolvers = {
   Query: {
     info: () => "HackerNewsクローン",
-    feed: () => links,
+    feed: () => async (parent, args, context) => {
+      return context.prisma.link.findMany();
+    },
   },
 
   Mutation: {
-    post: (parent, args) => {
-      let idCount = links.length;
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url,
-      };
-
-      links.push(link);
-      return link;
+    post: (parent, args, context) => {
+      const newLink = context.prisma.link.create({
+        data: {
+          url: args.url,
+          description: args.description,
+        },
+      });
+      return newLink;
     },
   },
 };
