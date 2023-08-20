@@ -2,6 +2,10 @@ const { ApolloServer, gql } = require("apollo-server");
 const fs = require("fs");
 const path = require("path");
 
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
+
 // HackerNewsの1つ1つの投稿
 let links = [
   {
@@ -39,6 +43,9 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf-8"),
   resolvers,
+  context: {
+    prisma,
+  },
 });
 
 server.listen().then(({ url }) => console.log(`${url}でサーバーを起動中`));
