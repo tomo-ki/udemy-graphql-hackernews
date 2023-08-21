@@ -1,4 +1,7 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+APP_SECRET = "Graphql";
 
 // ユーザの新規作成のresolver
 async function signup(parent, args, context) {
@@ -12,4 +15,11 @@ async function signup(parent, args, context) {
       password,
     },
   });
+
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
+  return {
+    token,
+    user,
+  };
 }
