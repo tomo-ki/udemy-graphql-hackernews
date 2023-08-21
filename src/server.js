@@ -5,13 +5,18 @@ const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 const { getUserId } = require("./utils");
 
-const prisma = new PrismaClient();
-
 // resolver関係のファイル
 const Query = require("./resolvers/Query");
 const Mutation = require("./resolvers/Mutation");
 const Link = require("./resolvers/Link");
 const User = require("./resolvers/User");
+
+// サブスクリプション(リアルタイム通信)の実装
+// Publisher(送信者) / Subscriber(受信者)
+const { PubSub } = require("apollo-server");
+
+const prisma = new PrismaClient();
+const pubsub = new PubSub();
 
 // resolver関数：typeDefsで定義した型に何か値を代入する関数
 // https://www.apollographql.com/docs/apollo-server/getting-started#step-5-define-a-resolver
@@ -31,6 +36,7 @@ const server = new ApolloServer({
     return {
       ...req,
       prisma,
+      pubsub,
       userId: req && req.headers.authorization ? getUserId(req) : null,
     };
   },
