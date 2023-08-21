@@ -47,3 +47,13 @@ async function login(parent, args, context) {
     user,
   };
 }
+
+// ニュースを投稿するresolver
+async function post(parent, args, context) {
+  return await context.prisma.link.create({
+    data: {
+      description: args.description,
+      url: args.url,
+    },
+  });
+}
