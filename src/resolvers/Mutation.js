@@ -1,8 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const APP_SECRET = require("../utils");
-
+const { APP_SECRET } = require("../utils");
 // ユーザの新規作成のresolver
 async function signup(parent, args, context) {
   // パスワードの設定
