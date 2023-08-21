@@ -7,27 +7,19 @@ const { getUserId } = require("./utils");
 
 const prisma = new PrismaClient();
 
+// resolver関係のファイル
+const Query = require("./resolvers/Query");
+const Mutation = require("./resolvers/Mutation");
+const Link = require("./resolvers/Link");
+const User = require("./resolvers/User");
+
 // resolver関数：typeDefsで定義した型に何か値を代入する関数
 // https://www.apollographql.com/docs/apollo-server/getting-started#step-5-define-a-resolver
 const resolvers = {
-  Query: {
-    info: () => "HackerNewsクローン",
-    feed: async (parent, args, context) => {
-      return context.prisma.link.findMany();
-    },
-  },
-
-  Mutation: {
-    post: (parent, args, context) => {
-      const newLink = context.prisma.link.create({
-        data: {
-          description: args.description,
-          url: args.url,
-        },
-      });
-      return newLink;
-    },
-  },
+  Query,
+  Mutation,
+  Link,
+  User,
 };
 
 // ApolloServerのインスタンス生成
