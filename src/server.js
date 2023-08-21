@@ -8,6 +8,7 @@ const { getUserId } = require("./utils");
 // resolver関係のファイル
 const Query = require("./resolvers/Query");
 const Mutation = require("./resolvers/Mutation");
+const Subscription = require("./resolvers/Subscription");
 const Link = require("./resolvers/Link");
 const User = require("./resolvers/User");
 
@@ -23,6 +24,7 @@ const pubsub = new PubSub();
 const resolvers = {
   Query,
   Mutation,
+  Subscription,
   Link,
   User,
 };
