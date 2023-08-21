@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const APP_SECRET = require("../utils")
+const APP_SECRET = require("../utils");
 
 // ユーザの新規作成のresolver
 async function signup(parent, args, context) {
@@ -50,11 +50,19 @@ async function login(parent, args, context) {
 
 // ニュースを投稿するresolver
 async function post(parent, args, context) {
+  const { userId } = context;
+
   return await context.prisma.link.create({
     data: {
       description: args.description,
       url: args.url,
-      postedBy: context.userId
+      postedBy: { connect: { id: userId } },
     },
   });
 }
+
+module.exports = {
+  signup,
+  login,
+  post,
+};
